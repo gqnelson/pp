@@ -19,13 +19,59 @@ public class MatrixRegionSum {
     static int[] row9 = { 9, 18, 27, 36, 45, 54, 63, 72, 81, 90};
     static int[][] matrix = { row1, row2, row3, row4, row5, row6, row7, row8, row9};
 
+    static int[] sr1 = { 0, 1, 4};
+    static int[] sr2 = { 2, 3, 2};
+    static int[] sr3 = { 1, 2, 7};
+    static int[][] smallMatrix = { sr1, sr2, sr3 };
+
     public static void main(String[] args) {
-        bruteForce(0, 0, 1, 1);
-        bruteForce(0, 0, 9, 9);
-        bruteForce(0, 0, 8, 9);
+//        bruteForce(0, 0, 0, 0);
+//        bruteForce(0, 0, 0, 1);
+//        bruteForce(0, 0, 1, 1);
+//        bruteForce(0, 0, 9, 9);
+//        bruteForce(0, 0, 8, 9);
+
+//        printMatrix(smallMatrix);
+//        System.out.println("");
+//        int[][] sat = computeSat(smallMatrix);
+//        printMatrix(sat);
+
+        printMatrix(matrix);
+        System.out.println("");
+        int[][] sat = computeSat(matrix);
+        printMatrix(sat);
+        System.out.println("");
+        int matrixRegionSum = computeRegionSum(0,0,1,1,sat);
+        System.out.println(String.format("The sum for (%d,%d) (%d,%d) = %d", 0, 0, 1, 1, matrixRegionSum));
+        matrixRegionSum = computeRegionSum(1,1,2,2,sat);
+        System.out.println(String.format("The sum for (%d,%d) (%d,%d) = %d", 1, 1, 2, 2, matrixRegionSum));
+    }
+
+    private static int computeRegionSum(int topX, int topY, int bottomX, int bottomY, int[][] sat) {
+        if (topX==0 && topY==0) return sat[bottomX][bottomY];
+        return sat[bottomX][bottomY] - sat[topX-1][bottomY] - sat[bottomX][topY-1] + sat[topX-1][topY-1];
+    }
+
+    private static int[][] computeSat(int[][] matrix) {
+        int[][] sat = new int[matrix.length][matrix[0].length];
+
+        for (int row = 0; row < matrix.length; row++) {
+            int currentRowSum = 0;
+            for (int column = 0; column < matrix[0].length; column++) {
+                currentRowSum += matrix[row][column];
+                sat[row][column] = previousRowSum(sat, row, column) + currentRowSum;
+            }
+        }
+        return sat;
+    }
+
+    private static int previousRowSum(int[][] sat, int row, int column) {
+        if (row==0) return 0;
+        return sat[row-1][column];
     }
 
     private static void bruteForce(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
+        //The complexity of this solution is O(MN) where M is the number of rows of the matrix, and N is the number of columns.
         System.out.println(String.format("\nBrute Force for matrix (%d, %d), (%d, %d)", topLeftX, topLeftY, bottomRightX, bottomRightY));
         if (topLeftX > matrix.length-1 || bottomRightX > matrix.length-1) {
             System.out.println(String.format("topLeftX %d or bottomRightX %d is larger than the number of rows %d", topLeftX, bottomRightX, matrix.length));
@@ -40,5 +86,16 @@ public class MatrixRegionSum {
             }
         }
         System.out.printf(String.format("Sum of inside matrix = %d", sum));
+    }
+
+    private static void printMatrix(int[][] matrix) {
+        for (int row = 0; row < matrix.length; row++) {
+            StringBuilder rowOut = new StringBuilder();
+            for (int column = 0; column < matrix[0].length; column++) {
+                rowOut.append(String.format("%d, ", matrix[row][column]));
+            }
+            System.out.println(rowOut.substring(0, rowOut.length()-2));
+            System.out.printf("");
+        }
     }
 }
