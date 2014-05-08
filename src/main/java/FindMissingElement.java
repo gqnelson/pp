@@ -28,6 +28,16 @@ public class FindMissingElement {
      *
      * 0 XOR 4 = 4
      * 4 XOR 4 = 0
+     *
+     * We XOR all the numbers in array1 and array2.
+     * All numbers in array2 also appear in array1, but there is an extra number in array1.
+     * So the effect of each XOR from array2 is being reset by the corresponding same number in array1
+     * (remember that the order of XOR is not important).
+     * But we can’t reset the XOR of the extra number in array1, because it doesn’t appear in array2.
+     * So the result is as if we XOR 0 with that extra number, which is the number itself.
+     * Since XOR of a number with 0 is the number. Therefore, in the end we get the missing number in array2.
+     * The space complexity of this solution is constant O(1) since we only use one extra variable.
+     * Time complexity is O(N) because we perform a single pass from the arrays.
      */
     private static void findMissingElement3(int[] first, int[] second) {
         int result = 0;
