@@ -1,3 +1,5 @@
+import java.util.StringJoiner;
+
 /**
  * Given a linkedlist of integers and an integer value,
  * delete every node of the linkedlist containing that value.
@@ -11,14 +13,17 @@ public class LinkedListRemove {
         printLinkedList(removeNode(5, head1));
 
         Node head2 = new Node(5, new Node(1, null));
+        System.out.println("");
         printLinkedList(head2);
         printLinkedList(removeNode(5, head2));
 
         Node head3 = new Node(1, new Node(5, new Node(1, null)));
+        System.out.println("");
         printLinkedList(head3);
         printLinkedList(removeNode(5, head3));
 
         Node head4 = new Node(5, new Node(1, new Node(2, new Node(5, new Node(7, null)))));
+        System.out.println("");
         printLinkedList(head4);
         printLinkedList(removeNode(5, head4));
 
@@ -42,11 +47,12 @@ public class LinkedListRemove {
     }
 
     private static void printLinkedList(Node head) {
+        StringJoiner joiner = new StringJoiner("->");
         while(head != null) {
-            System.out.print(String.format("%d ", head.value));
+            joiner.add(String.valueOf(head.value));
             head = head.next;
         }
-        System.out.println("");
+        System.out.println(joiner.toString());
     }
 
     static class Node {
